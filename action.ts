@@ -1,5 +1,6 @@
 import { generatePieces } from "./SunnyFactory"
 import { findPatterns, rotate } from "./findPattern"
+import { coordsSquares } from "./types"
 
 export const action = (table: number[][], pieces: number[][][], x: number, y: number, piece: number) => {
   for (const i in pieces[piece]) {
@@ -21,6 +22,8 @@ export const action = (table: number[][], pieces: number[][][], x: number, y: nu
     for (const i in patterns) {
       if (patterns[i] < 18) {
         table = restoreLine(table, patterns[i], patterns[i] >= 9)
+      } else {
+        table = restoreSquare(table, patterns[i] - 18)
       }
     }
     table = restoreTable(table)
@@ -34,7 +37,9 @@ const restoreLine = (table: number[][], line: number, column: boolean) => {
     table = rotate(table)
   }
   for (const i in table[line]) {
-    table[line][i] = 9
+    if ((table[line][i] + '')[0] !== '9') {
+      table[line][i] = 90 + table[line][i]
+    }
   }
   if (column) {
     table = rotate(table)
@@ -42,10 +47,22 @@ const restoreLine = (table: number[][], line: number, column: boolean) => {
   return table
 }
 
+const restoreSquare = (table: number[][], coordSquare: number) => {
+  const {x, y} = coordsSquares[coordSquare]
+  for (let c = x;c < x + 3;c++) {
+    for (let t = y;t < y + 3;t++) {
+      if ((table[c][t] + '')[0] !== '9') {
+        table[c][t] = 90 + table[c][t]
+      }
+    }
+  }
+  return table
+}
+
 const restoreTable = (table: number[][]) => {
   for (const i in table) {
     for (const x in table[i]) {
-      if (table[i][x] === 9) {
+      if ((table[i][x] + '')[0] === '9') {
         table[i][x] = 0
       }
     }

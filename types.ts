@@ -1,3 +1,11 @@
+export const coordsSquares = [
+  {x: 0, y: 0},
+  {x: 6, y: 0},
+  {x: 3, y: 3},
+  {x: 0, y: 6},
+  {x: 6, y: 6}
+]
+
 export const piecesList = [
   [
     [1, 1]
